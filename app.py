@@ -43,7 +43,15 @@ def add_post():
     return redirect(url_for('index'))
 
 
+@app.route('/delete/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    posts = load_posts()
+    updated_posts = [post for post in posts if post['id'] != post_id]
 
+    with open('blog_posts.json', 'w') as f:
+        json.dump(updated_posts, f, indent=4)
+
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
