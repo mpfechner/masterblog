@@ -84,6 +84,22 @@ def update_post(post_id):
     return redirect(url_for('index'))
 
 
+@app.route('/like/<int:post_id>', methods=['POST'])
+def like_post(post_id):
+    posts = load_posts()
+    post = next((p for p in posts if p['id'] == post_id), None)
+
+    if not post:
+        return "Post not found", 404
+
+    post['likes'] = post.get('likes', 0) + 1
+
+    with open('blog_posts.json', 'w') as f:
+        json.dump(posts, f, indent=4)
+
+    return redirect(url_for('index'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
